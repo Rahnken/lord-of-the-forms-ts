@@ -1,58 +1,94 @@
+import { useState } from "react";
 import { ErrorMessage } from "../ErrorMessage";
+import { TextInput } from "../utils/TextInputComponent";
+import { PhoneInput } from "../utils/PhoneInputComponent";
+import { TPhoneInputState } from "../types";
 
 const firstNameErrorMessage = "First name must be at least 2 characters long";
 const lastNameErrorMessage = "Last name must be at least 2 characters long";
 const emailErrorMessage = "Email is Invalid";
-const cityErrorMessage = "State is Invalid";
+const cityErrorMessage = "City is Invalid";
 const phoneNumberErrorMessage = "Invalid Phone Number";
 
 export const FunctionalForm = () => {
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [email, setEmail] = useState("");
+  const [city, setCity] = useState("");
+  const [phoneNumber, setPhoneNumber] = useState<TPhoneInputState>([
+    "",
+    "",
+    "",
+    "",
+  ]);
+
+  const validateInputs = () => {
+    //do the things
+  };
+
   return (
-    <form>
+    <form
+      onSubmit={(e) => {
+        e.preventDefault();
+        validateInputs();
+      }}
+    >
       <u>
         <h3>User Information Form</h3>
       </u>
 
-      {/* first name input */}
-      <div className="input-wrap">
-        <label>{"First Name"}:</label>
-        <input placeholder="Bilbo" />
-      </div>
+      <TextInput
+        labelText={"First Name"}
+        inputAttr={{
+          name: "firstName",
+          placeholder: "Bilbo",
+          value: firstName,
+          onChange: (e) => {
+            setFirstName(e.target.value);
+          },
+        }}
+      />
       <ErrorMessage message={firstNameErrorMessage} show={true} />
 
-      {/* last name input */}
-      <div className="input-wrap">
-        <label>{"Last Name"}:</label>
-        <input placeholder="Baggins" />
-      </div>
+      <TextInput
+        labelText={"Last Name"}
+        inputAttr={{
+          placeholder: "Baggins",
+          value: lastName,
+          onChange: (e) => {
+            setLastName(e.target.value);
+          },
+        }}
+      />
       <ErrorMessage message={lastNameErrorMessage} show={true} />
 
-      {/* Email Input */}
-      <div className="input-wrap">
-        <label>{"Email"}:</label>
-        <input placeholder="bilbo-baggins@adventurehobbits.net" />
-      </div>
+      <TextInput
+        labelText={"Email"}
+        inputAttr={{
+          placeholder: "bilbo-baggins@adventurehobbits.net",
+          value: email,
+          onChange: (e) => {
+            setEmail(e.target.value);
+          },
+        }}
+      />
       <ErrorMessage message={emailErrorMessage} show={true} />
-
-      {/* City Input */}
-      <div className="input-wrap">
-        <label>{"City"}:</label>
-        <input placeholder="Hobbiton" />
-      </div>
+      <TextInput
+        labelText={"City"}
+        inputAttr={{
+          placeholder: "Hobbiton",
+          value: city,
+          onChange: (e) => {
+            setCity(e.target.value);
+          },
+        }}
+      />
       <ErrorMessage message={cityErrorMessage} show={true} />
 
-      <div className="input-wrap">
-        <label htmlFor="phone">Phone:</label>
-        <div id="phone-input-wrap">
-          <input type="text" id="phone-input-1" placeholder="55" />
-          -
-          <input type="text" id="phone-input-2" placeholder="55" />
-          -
-          <input type="text" id="phone-input-3" placeholder="55" />
-          -
-          <input type="text" id="phone-input-4" placeholder="5" />
-        </div>
-      </div>
+      <PhoneInput
+        phoneInputState={phoneNumber}
+        setPhoneInputState={setPhoneNumber}
+      />
 
       <ErrorMessage message={phoneNumberErrorMessage} show={true} />
 
