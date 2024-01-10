@@ -1,16 +1,33 @@
-import { useState } from "react";
+import { Dispatch, SetStateAction, useState } from "react";
 import { ErrorMessage } from "../ErrorMessage";
 import { TextInput } from "../utils/TextInputComponent";
 import { PhoneInput } from "../utils/PhoneInputComponent";
-import { TPhoneInputState } from "../types";
+import { TPhoneInputState, TUserInformation } from "../types";
+import {
+  checkIfCityValid,
+  checkIfNameValid,
+  checkIfPhoneNumberValid,
+  checkIsEmailValid,
+} from "../utils/validations";
+import { capitalize, formatPhoneNumber } from "../utils/transformations";
 
-const firstNameErrorMessage = "First name must be at least 2 characters long";
-const lastNameErrorMessage = "Last name must be at least 2 characters long";
+const firstNameErrorMessage =
+  "First name must be at least 2 characters long and can only contain letters";
+const lastNameErrorMessage =
+  "Last name must be at least 2 characters long and can only contain letters";
 const emailErrorMessage = "Email is Invalid";
 const cityErrorMessage = "City is Invalid";
 const phoneNumberErrorMessage = "Invalid Phone Number";
 
-export const FunctionalForm = () => {
+export const FunctionalForm = ({
+  setUserInformation,
+  isSubmitted,
+  setIsSubmitted,
+}: {
+  setUserInformation: Dispatch<SetStateAction<TUserInformation>>;
+  isSubmitted: boolean;
+  setIsSubmitted: Dispatch<SetStateAction<boolean>>;
+}) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,15 +39,36 @@ export const FunctionalForm = () => {
     "",
   ]);
 
-  const validateInputs = () => {
-    //do the things
-  };
+  const isFirstNameValid = checkIfNameValid(firstName);
+  const isLastNameValid = checkIfNameValid(lastName);
+  const isEmailValid = checkIsEmailValid(email);
+  const isCityValid = checkIfCityValid(city);
+  const isPhoneNumberValid = checkIfPhoneNumberValid(phoneNumber);
+
+  const ValidStates = [
+    isCityValid,
+    isEmailValid,
+    isFirstNameValid,
+    isLastNameValid,
+    isPhoneNumberValid,
+  ];
 
   return (
     <form
       onSubmit={(e) => {
         e.preventDefault();
-        validateInputs();
+        setIsSubmitted(true);
+
+        if (ValidStates.every((state) => state)) {
+          const inputUserInfo: TUserInformation = {
+            firstName: capitalize(firstName),
+            lastName: capitalize(lastName),
+            email: email,
+            city: city,
+            phone: formatPhoneNumber(phoneNumber),
+          };
+          setUserInformation(inputUserInfo);
+        }
       }}
     >
       <u>
@@ -48,7 +86,11 @@ export const FunctionalForm = () => {
           },
         }}
       />
-      <ErrorMessage message={firstNameErrorMessage} show={true} />
+
+      <ErrorMessage
+        message={firstNameErrorMessage}
+        show={isSubmitted && !isFirstNameValid}
+      />
 
       <TextInput
         labelText={"Last Name"}
@@ -60,7 +102,10 @@ export const FunctionalForm = () => {
           },
         }}
       />
-      <ErrorMessage message={lastNameErrorMessage} show={true} />
+      <ErrorMessage
+        message={lastNameErrorMessage}
+        show={isSubmitted && !isLastNameValid}
+      />
 
       <TextInput
         labelText={"Email"}
@@ -72,7 +117,10 @@ export const FunctionalForm = () => {
           },
         }}
       />
-      <ErrorMessage message={emailErrorMessage} show={true} />
+      <ErrorMessage
+        message={emailErrorMessage}
+        show={isSubmitted && !isEmailValid}
+      />
       <TextInput
         labelText={"City"}
         inputAttr={{
@@ -83,14 +131,20 @@ export const FunctionalForm = () => {
           },
         }}
       />
-      <ErrorMessage message={cityErrorMessage} show={true} />
+      <ErrorMessage
+        message={cityErrorMessage}
+        show={isSubmitted && !isCityValid}
+      />
 
       <PhoneInput
         phoneInputState={phoneNumber}
         setPhoneInputState={setPhoneNumber}
       />
 
-      <ErrorMessage message={phoneNumberErrorMessage} show={true} />
+      <ErrorMessage
+        message={phoneNumberErrorMessage}
+        show={isSubmitted && !isPhoneNumberValid}
+      />
 
       <input type="submit" value="Submit" />
     </form>

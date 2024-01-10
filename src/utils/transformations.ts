@@ -1,9 +1,14 @@
-export const capitalize = () => {
-    // todo: build this function
-    // `capitalize("jOn")` should output `"Jon"`
-}
+import { TPhoneInputState } from "../types";
 
-export const formatPhoneNumber = () => {
-    // todo: build this function
-    // `formatPhoneNumber("1234567")` should be `"12-34-56-7"`
-}
+export const capitalize = (str: string) => {
+  // todo: build this function
+  // `capitalize("jOn")` should output `"Jon"`
+  const capital = str[0].toUpperCase();
+  const rest = str.slice(1).toLowerCase();
+
+  return capital.concat(rest);
+};
+
+export const formatPhoneNumber = (str: TPhoneInputState) => {
+  return str.join("-");
+};

@@ -1,10 +1,10 @@
 import { Component } from "react";
 import { ClassForm } from "./ClassForm";
-import { UserInformation } from "../types";
+import { TUserInformation } from "../types";
 import { ProfileInformation } from "../ProfileInformation";
-type State = { userInformation: UserInformation | null };
+type State = { userInformation: TUserInformation | null };
 
-const defaultUser: UserInformation = {
+const defaultUser: TUserInformation = {
   email: "default@default.com",
   firstName: "Default",
   lastName: "Default",

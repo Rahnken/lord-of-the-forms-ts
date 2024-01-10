@@ -1,6 +1,7 @@
 import { ChangeEventHandler, Dispatch, SetStateAction, useRef } from "react";
 import { TPhoneInputState } from "../types";
 
+const inputMaxLengths = [2, 2, 2, 1];
 export const PhoneInput = ({
   phoneInputState,
   setPhoneInputState,
@@ -19,7 +20,6 @@ export const PhoneInput = ({
   const createOnChangeHandler = (
     index: 0 | 1 | 2 | 3
   ): ChangeEventHandler<HTMLInputElement> => (e) => {
-    const inputMaxLengths = [2, 2, 2, 1];
     const currentMaxLength = inputMaxLengths[index];
     const nextRef = refs[index + 1] ?? refs[3];
     const prevRef = refs[index - 1] ?? refs[0];
@@ -48,10 +48,12 @@ export const PhoneInput = ({
           ref={ref0}
           onChange={createOnChangeHandler(0)}
           placeholder="55"
+          maxLength={inputMaxLengths[0]}
         />
         <input
           id="phone-input-2"
           ref={ref1}
+          maxLength={inputMaxLengths[1]}
           onChange={createOnChangeHandler(1)}
           placeholder="55"
         />
@@ -60,11 +62,13 @@ export const PhoneInput = ({
           ref={ref2}
           onChange={createOnChangeHandler(2)}
           placeholder="55"
+          maxLength={inputMaxLengths[2]}
         />
         <input
           id="phone-input-4"
           ref={ref3}
           placeholder="5"
+          maxLength={inputMaxLengths[3]}
           onChange={createOnChangeHandler(3)}
         />
       </div>
