@@ -1,4 +1,5 @@
 import { TPhoneInputState } from "../types";
+import { allCities } from "./all-cities";
 
 export function checkIsEmailValid(emailAddress: string) {
   // eslint-disable-next-line no-useless-escape
@@ -33,10 +34,15 @@ export function checkIfNameValid(inputValue: string) {
 }
 
 export function checkIfCityValid(inputValue: string) {
-  // Check if city is in all-cities file
-  return true;
+  return allCities.includes(inputValue);
 }
 export function checkIfPhoneNumberValid(inputValue: TPhoneInputState) {
-  //check if phone number would be valid
-  return true;
+  const reqLengths = [2, 2, 2, 1];
+
+  return (
+    inputValue[0].length === reqLengths[0] &&
+    inputValue[1].length === reqLengths[1] &&
+    inputValue[2].length === reqLengths[2] &&
+    inputValue[3].length === reqLengths[3]
+  );
 }

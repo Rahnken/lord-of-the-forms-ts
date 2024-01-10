@@ -10,6 +10,7 @@ import {
   checkIsEmailValid,
 } from "../utils/validations";
 import { capitalize, formatPhoneNumber } from "../utils/transformations";
+import { allCities } from "../utils/all-cities";
 
 const firstNameErrorMessage =
   "First name must be at least 2 characters long and can only contain letters";
@@ -71,6 +72,12 @@ export const FunctionalForm = ({
         }
       }}
     >
+      <datalist id="cityList">
+        {allCities.map(
+          (value, index) =>
+            ((<option value={value} key={index}></option>) as unknown) as string
+        )}
+      </datalist>
       <u>
         <h3>User Information Form</h3>
       </u>
@@ -129,6 +136,7 @@ export const FunctionalForm = ({
           onChange: (e) => {
             setCity(e.target.value);
           },
+          list: "cityList",
         }}
       />
       <ErrorMessage
