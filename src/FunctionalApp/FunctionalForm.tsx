@@ -69,6 +69,8 @@ export const FunctionalForm = ({
             phone: formatPhoneNumber(phoneNumber),
           };
           setUserInformation(inputUserInfo);
+        } else {
+          alert("Bad Data Input");
         }
       }}
     >
