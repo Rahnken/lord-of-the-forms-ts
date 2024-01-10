@@ -12,12 +12,10 @@ export const InfoRow = ({ label, value }: { label: string; value: string }) => {
 };
 export const ProfileInformation = ({
   userData,
-  isSubmitted,
 }: {
-  userData: TUserInformation;
-  isSubmitted: boolean;
+  userData: TUserInformation | null;
 }) => {
-  if (!isSubmitted) {
+  if (!userData) {
     return (
       <>
         <u>

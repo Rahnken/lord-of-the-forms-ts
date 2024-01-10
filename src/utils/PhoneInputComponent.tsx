@@ -47,6 +47,7 @@ export const PhoneInput = ({
           id="phone-input-1"
           ref={ref0}
           onChange={createOnChangeHandler(0)}
+          value={phoneInputState[0]}
           placeholder="55"
           maxLength={inputMaxLengths[0]}
         />
@@ -56,6 +57,7 @@ export const PhoneInput = ({
           maxLength={inputMaxLengths[1]}
           onChange={createOnChangeHandler(1)}
           placeholder="55"
+          value={phoneInputState[1]}
         />
         <input
           id="phone-input-3"
@@ -63,6 +65,7 @@ export const PhoneInput = ({
           onChange={createOnChangeHandler(2)}
           placeholder="55"
           maxLength={inputMaxLengths[2]}
+          value={phoneInputState[2]}
         />
         <input
           id="phone-input-4"
@@ -70,6 +73,7 @@ export const PhoneInput = ({
           placeholder="5"
           maxLength={inputMaxLengths[3]}
           onChange={createOnChangeHandler(3)}
+          value={phoneInputState[3]}
         />
       </div>
     </div>

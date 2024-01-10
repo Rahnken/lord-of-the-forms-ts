@@ -22,12 +22,8 @@ const phoneNumberErrorMessage = "Invalid Phone Number";
 
 export const FunctionalForm = ({
   setUserInformation,
-  isSubmitted,
-  setIsSubmitted,
 }: {
-  setUserInformation: Dispatch<SetStateAction<TUserInformation>>;
-  isSubmitted: boolean;
-  setIsSubmitted: Dispatch<SetStateAction<boolean>>;
+  setUserInformation: Dispatch<SetStateAction<TUserInformation | null>>;
 }) => {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -40,6 +36,7 @@ export const FunctionalForm = ({
     "",
   ]);
 
+  const [isSubmitted, setIsSubmitted] = useState(false);
   const isFirstNameValid = checkIfNameValid(firstName);
   const isLastNameValid = checkIfNameValid(lastName);
   const isEmailValid = checkIsEmailValid(email);
@@ -53,6 +50,15 @@ export const FunctionalForm = ({
     isLastNameValid,
     isPhoneNumberValid,
   ];
+
+  const resetFormState = () => {
+    setIsSubmitted(false);
+    setFirstName("");
+    setCity("");
+    setLastName("");
+    setEmail("");
+    setPhoneNumber(["", "", "", ""]);
+  };
 
   return (
     <form
@@ -69,6 +75,7 @@ export const FunctionalForm = ({
             phone: formatPhoneNumber(phoneNumber),
           };
           setUserInformation(inputUserInfo);
+          resetFormState();
         } else {
           alert("Bad Data Input");
         }
