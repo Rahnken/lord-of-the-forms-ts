@@ -29,7 +29,7 @@ export function checkIfNameValid(inputValue: string) {
     inputValue
       .split("")
       .every((char) => char.toLowerCase() !== char.toUpperCase()) &&
-    inputValue.length > 2
+    inputValue.length >= 2
   );
 }
 

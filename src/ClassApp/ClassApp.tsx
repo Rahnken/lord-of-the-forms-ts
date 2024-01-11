@@ -13,18 +13,20 @@ const defaultUser: TUserInformation = {
 };
 
 export class ClassApp extends Component<Record<string, never>, State> {
+  state: State = {
+    userInformation: null,
+  };
+  setUserInformation = (userInfo: TUserInformation) => {
+    this.setState({ userInformation: userInfo });
+  };
+
   render() {
+    const { userInformation } = this.state;
     return (
       <>
         <h2>Class</h2>
-        <ProfileInformation
-          userData={
-            // toggle the following lines to change
-            // null
-            defaultUser
-          }
-        />
-        <ClassForm />
+        <ProfileInformation userData={userInformation} />
+        <ClassForm setUserInformation={this.setUserInformation} />
       </>
     );
   }

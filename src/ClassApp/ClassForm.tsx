@@ -2,20 +2,22 @@ import { Component } from "react";
 import { ErrorMessage } from "../ErrorMessage";
 import { TextInput } from "../utils/TextInputComponent";
 import { PhoneInput } from "../utils/PhoneInputComponent";
-import { TPhoneInputState } from "../types";
+import { TPhoneInputState, TUserInformation } from "../types";
 import {
   checkIfNameValid,
   checkIfCityValid,
   checkIfPhoneNumberValid,
   checkIsEmailValid,
 } from "../utils/validations";
+import { capitalize, formatPhoneNumber } from "../utils/transformations";
 
-const firstNameErrorMessage = "First name must be at least 2 characters long";
-const lastNameErrorMessage = "Last name must be at least 2 characters long";
+const firstNameErrorMessage =
+  "First name must be at least 2 characters long and can only contain letters";
+const lastNameErrorMessage =
+  "Last name must be at least 2 characters long and can only contain letters";
 const emailErrorMessage = "Email is Invalid";
-const cityErrorMessage = "State is Invalid";
+const cityErrorMessage = "City is Invalid";
 const phoneNumberErrorMessage = "Invalid Phone Number";
-
 interface TState {
   firstName: string;
   lastName: string;
@@ -24,8 +26,10 @@ interface TState {
   phoneNumber: TPhoneInputState;
   isSubmitted: boolean;
 }
-
-export class ClassForm extends Component<Record<string, never>, TState> {
+interface ClassFormProps {
+  setUserInformation: (userInfo: TUserInformation) => void;
+}
+export class ClassForm extends Component<ClassFormProps, TState> {
   state: TState = {
     firstName: "",
     lastName: "",
@@ -35,11 +39,13 @@ export class ClassForm extends Component<Record<string, never>, TState> {
     isSubmitted: false,
   };
 
-  isValidFirstName = checkIfNameValid(this.state.firstName);
-  isValidLastName = checkIfNameValid(this.state.lastName);
-  isValidEmail = checkIsEmailValid(this.state.email);
-  isValidCity = checkIfCityValid(this.state.city);
-  isValidPhoneNumber = checkIfPhoneNumberValid(this.state.phoneNumber);
+  getValidityStates = () => ({
+    isValidFirstName: checkIfNameValid(this.state.firstName),
+    isValidLastName: checkIfNameValid(this.state.lastName),
+    isValidEmail: checkIsEmailValid(this.state.email),
+    isValidCity: checkIfCityValid(this.state.city),
+    isValidPhoneNumber: checkIfPhoneNumberValid(this.state.phoneNumber),
+  });
 
   render() {
     const {
@@ -50,8 +56,38 @@ export class ClassForm extends Component<Record<string, never>, TState> {
       phoneNumber,
       isSubmitted,
     } = this.state;
+
+    const validStates = this.getValidityStates();
+
+    const {
+      isValidFirstName,
+      isValidLastName,
+      isValidCity,
+      isValidEmail,
+      isValidPhoneNumber,
+    } = validStates;
+
     return (
-      <form>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          this.setState({ isSubmitted: true });
+
+          const validStates = this.getValidityStates();
+          const allValid = Object.values(validStates).every((state) => state);
+
+          if (allValid) {
+            const inputUserInfo: TUserInformation = {
+              firstName: capitalize(firstName),
+              lastName: capitalize(lastName),
+              email: email,
+              city: city,
+              phone: formatPhoneNumber(phoneNumber),
+            };
+            this.props.setUserInformation(inputUserInfo);
+          }
+        }}
+      >
         <u>
           <h3>User Information Form</h3>
         </u>
@@ -68,7 +104,7 @@ export class ClassForm extends Component<Record<string, never>, TState> {
         />
         <ErrorMessage
           message={firstNameErrorMessage}
-          show={isSubmitted && !this.isValidFirstName}
+          show={isSubmitted && !isValidFirstName}
         />
 
         <TextInput
@@ -83,7 +119,7 @@ export class ClassForm extends Component<Record<string, never>, TState> {
         />
         <ErrorMessage
           message={lastNameErrorMessage}
-          show={isSubmitted && !this.isValidLastName}
+          show={isSubmitted && !isValidLastName}
         />
 
         <TextInput
@@ -98,7 +134,7 @@ export class ClassForm extends Component<Record<string, never>, TState> {
         />
         <ErrorMessage
           message={emailErrorMessage}
-          show={isSubmitted && !this.isValidEmail}
+          show={isSubmitted && !isValidEmail}
         />
 
         <TextInput
@@ -114,7 +150,7 @@ export class ClassForm extends Component<Record<string, never>, TState> {
         />
         <ErrorMessage
           message={cityErrorMessage}
-          show={isSubmitted && !this.isValidCity}
+          show={isSubmitted && !isValidCity}
         />
 
         <PhoneInput
@@ -126,7 +162,7 @@ export class ClassForm extends Component<Record<string, never>, TState> {
 
         <ErrorMessage
           message={phoneNumberErrorMessage}
-          show={isSubmitted && !this.isValidPhoneNumber}
+          show={isSubmitted && !isValidPhoneNumber}
         />
 
         <input type="submit" value="Submit" />
