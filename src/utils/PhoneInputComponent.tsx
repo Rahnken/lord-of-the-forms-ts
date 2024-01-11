@@ -1,4 +1,4 @@
-import { ChangeEventHandler, Dispatch, SetStateAction, useRef } from "react";
+import { ChangeEventHandler, useRef } from "react";
 import { TPhoneInputState } from "../types";
 
 const inputMaxLengths = [2, 2, 2, 1];
@@ -7,7 +7,7 @@ export const PhoneInput = ({
   setPhoneInputState,
 }: {
   phoneInputState: TPhoneInputState;
-  setPhoneInputState: Dispatch<SetStateAction<TPhoneInputState>>;
+  setPhoneInputState: (input: TPhoneInputState) => void;
 }) => {
   const refs = [
     useRef<HTMLInputElement>(null),
